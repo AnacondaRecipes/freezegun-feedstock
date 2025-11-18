@@ -1,26 +1,27 @@
-{% set version = "1.5.1" %}
+{% set version = "1.5.5" %}
 
 package:
   name: freezegun
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/f/freezegun/freezegun-{{ version }}.tar.gz
-  sha256: b29dedfcda6d5e8e083ce71b2b542753ad48cfec44037b3fc79702e2980a89e9
+  url: https://pypi.org/packages/source/f/freezegun/freezegun-{{ version }}.tar.gz
+  sha256: ac7742a6cc6c25a2c35e9292dfd554b897b517d2dec26891a2e8debf205cb94a
 
 build:
   number: 0
   noarch: python
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
+  skip: true  # [py<38]
 
 requirements:
   host:
-    - python >=3.7
+    - python
     - pip
     - setuptools
     - wheel
   run:
-    - python >=3.7
+    - python
     - python-dateutil >=2.7
 
 test:
@@ -38,7 +39,7 @@ about:
   license_file: LICENSE
   summary: Let your Python tests travel through time
   description: |
-    FreezeGun is a library that allows your Python tests to 
+    FreezeGun is a library that allows your Python tests to
     travel through time by mocking the datetime module.
   dev_url: https://github.com/spulec/freezegun
   doc_url: https://github.com/spulec/freezegun
