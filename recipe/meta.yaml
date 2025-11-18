@@ -1,16 +1,16 @@
 {% set version = "1.5.5" %}
+{% set name = "freezegun" %}
 
 package:
-  name: freezegun
+  name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.org/packages/source/f/freezegun/freezegun-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   sha256: ac7742a6cc6c25a2c35e9292dfd554b897b517d2dec26891a2e8debf205cb94a
 
 build:
   number: 0
-  noarch: python
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
   skip: true  # [py<38]
 
@@ -25,12 +25,17 @@ requirements:
     - python-dateutil >=2.7
 
 test:
+  source_files:
+    - tests
   imports:
     - freezegun
   commands:
     - pip check
+    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
+    - pytest -v tests
   requires:
     - pip
+    - pytest
 
 about:
   home: https://github.com/spulec/freezegun
