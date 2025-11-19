@@ -24,6 +24,15 @@ requirements:
     - python
     - python-dateutil >=2.7
 
+{% set deselect_tests = "" %}
+# AttributeError: module 'time' has no attribute 'tzset' (it is not available on Windows)
+{% set deselect_tests = " --deselect=tests/test_datetimes.py::test_compare_datetime_and_time_with_timezone" %}  # [win]
+# >       db = sqlite3.connect("/tmp/foo")
+            #  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# E       sqlite3.OperationalError: unable to open database file
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_sqlite3.py::test_fake_datetime_select" %}  # [win]
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_sqlite3.py::test_fake_date_select" %}  # [win]
+
 test:
   source_files:
     - tests
@@ -32,7 +41,7 @@ test:
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
-    - pytest -v tests
+    - pytest -v {{ deselect_tests }} tests
   requires:
     - pip
     - pytest
