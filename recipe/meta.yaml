@@ -32,6 +32,9 @@ requirements:
 # E       sqlite3.OperationalError: unable to open database file
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_sqlite3.py::test_fake_datetime_select" %}  # [win]
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_sqlite3.py::test_fake_date_select" %}  # [win]
+# E           assert 2372093000000 > 2372093000000
+# E            +  where 2372093000000 = <built-in function monotonic_ns>()
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_ticking.py::test_ticking_monotonic" %}  # [win]
 
 test:
   source_files:
